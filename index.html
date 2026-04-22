@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PareDeJogar — Status do Projeto</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --verde: #3B6D11;
+    --verde-claro: #f0f7e8;
+    --vermelho: #C0392B;
+    --creme: #f5f0e8;
+    --escuro: #1a1a1a;
+    --cinza: #666;
+    --amarelo: #e8a000;
+    --azul: #1A6B8A;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--creme); color: var(--escuro); overflow-x: hidden; }
+  .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px; position: relative; background: linear-gradient(160deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%); overflow: hidden; }
+  .hero::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(59,109,17,0.15) 0%, transparent 70%); top: -100px; left: -100px; animation: pulse 6s ease-in-out infinite; }
+  .hero::after { content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(192,57,43,0.1) 0%, transparent 70%); bottom: -50px; right: -50px; animation: pulse 8s ease-in-out infinite reverse; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  .hero-badge { display: inline-block; background: rgba(59,109,17,0.2); border: 1px solid rgba(59,109,17,0.4); color: #7dc742; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.4rem 1rem; border-radius: 99px; margin-bottom: 2rem; position: relative; z-index: 1; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(3rem, 8vw, 7rem); color: #fff; line-height: 1; margin-bottom: 0.5rem; position: relative; z-index: 1; }
+  .hero h1 span { color: #7dc742; }
+  .hero-sub { font-size: clamp(1rem, 2vw, 1.3rem); color: rgba(255,255,255,0.5); margin-bottom: 3rem; font-weight: 300; position: relative; z-index: 1; }
+  .hero-stats { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; }
+  .stat { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.25rem 2rem; text-align: center; }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: #7dc742; display: block; }
+  .stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; }
+  section { padding: 80px 24px; max-width: 1000px; margin: 0 auto; }
+  .section-tag { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--verde); background: var(--verde-claro); padding: 0.3rem 0.8rem; border-radius: 99px; margin-bottom: 1rem; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 2.5rem; line-height: 1.2; }
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
+  .stack-card { background: #fff; border-radius: 12px; padding: 1.25rem; border: 1px solid #e8e4dc; transition: transform 0.2s, box-shadow 0.2s; }
+  .stack-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .stack-icon { font-size: 1.8rem; margin-bottom: 0.5rem; display: block; }
+  .stack-name { font-weight: 700; font-size: 0.9rem; color: var(--escuro); }
+  .stack-desc { font-size: 0.78rem; color: var(--cinza); margin-top: 0.25rem; }
+  .done-list { display: flex; flex-direction: column; gap: 1rem; }
+  .done-item { background: #fff; border-radius: 12px; padding: 1.25rem 1.5rem; border: 1px solid #e8e4dc; display: flex; align-items: flex-start; gap: 1rem; position: relative; overflow: hidden; }
+  .done-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--verde); }
+  .done-check { width: 28px; height: 28px; border-radius: 50%; background: var(--verde-claro); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; margin-top: 2px; }
+  .done-text strong { display: block; font-size: 0.92rem; margin-bottom: 0.2rem; }
+  .done-text span { font-size: 0.8rem; color: var(--cinza); }
+  .pending-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+  .pending-card { background: #fff; border-radius: 12px; padding: 1.25rem; border: 1px solid #e8e4dc; }
+  .pending-card.alta { border-left: 3px solid var(--vermelho); }
+  .pending-card.media { border-left: 3px solid var(--amarelo); }
+  .pending-card.baixa { border-left: 3px solid var(--azul); }
+  .pending-priority { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .alta .pending-priority { color: var(--vermelho); }
+  .media .pending-priority { color: var(--amarelo); }
+  .baixa .pending-priority { color: var(--azul); }
+  .pending-card h4 { font-size: 0.9rem; margin-bottom: 0.3rem; }
+  .pending-card p { font-size: 0.78rem; color: var(--cinza); line-height: 1.5; }
+  .analise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  @media (max-width: 600px) { .analise-grid { grid-template-columns: 1fr; } }
+  .analise-card { background: #fff; border-radius: 16px; padding: 1.5rem; border: 1px solid #e8e4dc; }
+  .analise-card h3 { font-size: 1rem; margin-bottom: 1rem; }
+  .analise-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .analise-card ul li { font-size: 0.82rem; color: var(--cinza); padding-left: 1rem; position: relative; line-height: 1.5; }
+  .analise-card ul li::before { content: '→'; position: absolute; left: 0; color: var(--verde); font-weight: 700; }
+  .card-solido { border-top: 3px solid var(--verde); }
+  .card-atencao { border-top: 3px solid var(--amarelo); }
+  .card-risco { border-top: 3px solid var(--vermelho); }
+  .card-recomendacao { border-top: 3px solid var(--azul); }
+  .veredicto { background: linear-gradient(135deg, #1a1a1a, #2d2d2d); color: #fff; border-radius: 20px; padding: 3rem; text-align: center; margin-top: 3rem; }
+  .veredicto h3 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; margin-bottom: 1rem; }
+  .veredicto p { font-size: 0.95rem; color: rgba(255,255,255,0.6); max-width: 600px; margin: 0 auto; line-height: 1.7; }
+  .score { display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; border-radius: 50%; background: rgba(125,199,66,0.15); border: 2px solid #7dc742; font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: #7dc742; margin-bottom: 1rem; }
+  .divider { width: 60px; height: 3px; background: var(--verde); margin: 0 auto 2rem; border-radius: 99px; }
+  .full-divider { max-width: 1000px; margin: 0 auto; border: none; border-top: 1px solid #e8e4dc; }
+  footer { text-align: center; padding: 3rem 24px; font-size: 0.78rem; color: var(--cinza); }
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="hero-badge">📊 Relatório Interno — Abril 2026</span>
+  <h1>Pare<span>De</span><br/>Jogar</h1>
+  <p class="hero-sub">Status completo do projeto · Instituto ISTOP</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">5</span><span class="stat-label">Módulos</span></div>
+    <div class="stat"><span class="stat-num">R$519</span><span class="stat-label">Receita potencial/user</span></div>
+    <div class="stat"><span class="stat-num">~80%</span><span class="stat-label">MVP concluído</span></div>
+    <div class="stat"><span class="stat-num">Live</span><span class="stat-label">paredejogar.com</span></div>
+  </div>
+</div>
+
+<section class="fade-in">
+  <div class="section-tag">⚙️ Tecnologia</div>
+  <h2>Stack utilizada</h2>
+  <div class="stack-grid">
+    <div class="stack-card"><span class="stack-icon">⚛️</span><div class="stack-name">React 19 + Vite</div><div class="stack-desc">Frontend SPA com roteamento client-side</div></div>
+    <div class="stack-card"><span class="stack-icon">🎨</span><div class="stack-name">Tailwind CSS 4</div><div class="stack-desc">Estilização utilitária + estilos inline</div></div>
+    <div class="stack-card"><span class="stack-icon">🗄️</span><div class="stack-name">Supabase</div><div class="stack-desc">Auth, banco de dados, Edge Functions, RLS</div></div>
+    <div class="stack-card"><span class="stack-icon">💳</span><div class="stack-name">Mercado Pago</div><div class="stack-desc">Checkout Pro + Webhook de pagamento</div></div>
+    <div class="stack-card"><span class="stack-icon">🔐</span><div class="stack-name">Google OAuth</div><div class="stack-desc">Login social via Supabase Auth</div></div>
+    <div class="stack-card"><span class="stack-icon">🚀</span><div class="stack-name">Vercel</div><div class="stack-desc">Deploy automático via GitHub push</div></div>
+    <div class="stack-card"><span class="stack-icon">📦</span><div class="stack-name">GitHub</div><div class="stack-desc">softiahouse/paredejogar · branch main</div></div>
+    <div class="stack-card"><span class="stack-icon">🤖</span><div class="stack-name">Cursor AI</div><div class="stack-desc">Editor com IA para desenvolvimento iterativo</div></div>
+  </div>
+</section>
+
+<hr class="full-divider" />
+
+<section class="fade-in">
+  <div class="section-tag">✅ Concluído</div>
+  <h2>O que já foi feito</h2>
+  <div class="done-list">
+    <div class="done-item"><div class="done-check">✅</div><div class="done-text"><strong>Autenticação completa</strong><span>Google OAuth + cadastro por email + recuperação de senha + callback route</span></div></div>
+    <div class="done-item"><div class="done-check">✅</div><div class="done-text"><strong>5 módulos com conteúdo completo</strong><span>23 aulas + Contrato de Interrupção, Mapa de Gatilhos, Plano de Manejo, Estrutura de Rotina, Protocolo de Prevenção</span></div></div>
+    <div class="done-item"><div class="done-check">✅</div><div class="done-text"><strong>Sistema de pagamento (Mercado Pago)</strong><span>Edge Function criar-preferencia-mp + webhook-mp + liberação automática de módulos</span></div></div>
+    <div class="done-item"><div class="done-check">✅</div><div class="done-text"><strong>Painel do utilizador</strong><span>Progresso, módulos com paywall sequencial, livros gratuitos, detalhes científicos colapsáveis</span></div></div>
+    <div class="done-item"><div class="done-check">✅</div><div class="done-text"><strong>Botão de Emergência</strong><span>Flutuante em todas as páginas, versão free (13 perguntas + CTA) e versão paga (curva do impulso + 100 perguntas + respiração)</span></div></div>
+    <div class="done-item"><div class="done-check">✅</div><div class="done-text"><strong>Contrato de Interrupção</strong><span>Assinatura digital com persistência no Supabase</span></div></div>
+    <div class="done-item"><div class="done-check">✅</div><div class="done-text"><strong>Quiz de autoavaliação</strong><span>Para jogadores e familiares, com resultado e CTA WhatsApp</span></div></div>
+    <div class="done-item"><div class="done-check">✅</div><div class="done-text"><strong>Landing Page completa</strong><span>Hero, programa ISTOP, depoimentos, familiares, FAQ, seta de scroll animada</span></div></div>
+    <div class="done-item"><div class="done-check">✅</div><div class="done-text"><strong>Sócios com acesso permanente</strong><span>4 emails com todos os módulos liberados via Supabase</span></div></div>
+    <div class="done-item"><div class="done-check">✅</div><div class="done-text"><strong>Certificado de conclusão</strong><span>Gerado ao concluir o Módulo 5</span></div></div>
+  </div>
+</section>
+
+<hr class="full-divider" />
+
+<section class="fade-in">
+  <div class="section-tag">⏳ Pendente</div>
+  <h2>O que ainda falta</h2>
+  <div class="pending-grid">
+    <div class="pending-card alta"><div class="pending-priority">🔴 Alta prioridade</div><h4>Teste ponta a ponta do pagamento</h4><p>Simular compra com conta de teste do Mercado Pago e confirmar webhook → modulos_liberados</p></div>
+    <div class="pending-card alta"><div class="pending-priority">🔴 Alta prioridade</div><h4>Emails @paredejogar.com</h4><p>Zoho Mail Lite (~R$25/mês) para 5 contas. Necessário para comunicação profissional</p></div>
+    <div class="pending-card media"><div class="pending-priority">🟡 Média prioridade</div><h4>Painel admin / financeiro</h4><p>Ver receita total, utilizadores ativos, pagamentos aprovados, módulos mais vendidos</p></div>
+    <div class="pending-card media"><div class="pending-priority">🟡 Média prioridade</div><h4>Google Analytics</h4><p>Rastreamento de conversões, funil de pagamento, origem dos utilizadores</p></div>
+    <div class="pending-card media"><div class="pending-priority">🟡 Média prioridade</div><h4>Verificar PDFs no Vercel</h4><p>Confirmar que os livros gratuitos abrem corretamente em produção</p></div>
+    <div class="pending-card baixa"><div class="pending-priority">🔵 Baixa prioridade</div><h4>Emails transacionais</h4><p>Boas-vindas, confirmação de compra, lembrete de módulo não concluído</p></div>
+    <div class="pending-card baixa"><div class="pending-priority">🔵 Baixa prioridade</div><h4>Code splitting / otimização</h4><p>Bundle JS em 663kb. Dynamic imports para reduzir carga inicial no mobile</p></div>
+    <div class="pending-card baixa"><div class="pending-priority">🔵 Baixa prioridade</div><h4>Teste de fluxo completo</h4><p>Cadastro → pagamento → módulo → contrato → painel → certificado</p></div>
+  </div>
+</section>
+
+<hr class="full-divider" />
+
+<section class="fade-in">
+  <div class="section-tag">🔍 Análise Técnica</div>
+  <h2>Estado real do projeto</h2>
+  <div class="analise-grid">
+    <div class="analise-card card-solido"><h3>💚 Pontos sólidos</h3><ul><li>Stack moderna e adequada ao produto</li><li>Supabase RLS protege dados por utilizador</li><li>Deploy automático via Vercel funciona bem</li><li>Conteúdo dos módulos é rico e fundamentado</li><li>Botão de emergência é diferenciador real</li><li>Modelo de pagamento sequencial é inteligente</li><li>Sócios com acesso permanente bem implementado</li></ul></div>
+    <div class="analise-card card-atencao"><h3>🟡 Pontos de atenção</h3><ul><li>Pagamento MP nunca testado ponta a ponta</li><li>Sem emails transacionais pós-compra</li><li>Bundle JS pesado — pode impactar mobile</li><li>Sem analytics — origem dos utilizadores desconhecida</li><li>OAuth mostra domínio Supabase (limitação técnica)</li><li>Sem sistema de notificações ou lembretes</li></ul></div>
+    <div class="analise-card card-risco"><h3>🔴 Gambiarras identificadas</h3><ul><li>BotaoEmergencia.jsx teve 15+ edições iterativas sem refatoração</li><li>Mix de Tailwind + inline styles cria inconsistência visual</li><li>Lógica de módulos duplicada em Painel.jsx</li><li>modulosLiberados={[]} hardcoded no App.jsx</li><li>PROJETO.md desatualizado</li></ul></div>
+    <div class="analise-card card-recomendacao"><h3>🔵 Recomendações</h3><ul><li>Criar hook useModulos() centralizado</li><li>Refatorar BotaoEmergencia.jsx em componentes separados</li><li>Padronizar estilos: Tailwind OU inline</li><li>Testar fluxo MP em sandbox antes do lançamento</li><li>Atualizar PROJETO.md com estado atual</li><li>Usar Resend ou Supabase Emails para transacionais</li></ul></div>
+  </div>
+  <div class="veredicto">
+    <div class="score">7</div>
+    <h3>Veredicto: Projeto viável, base sólida</h3>
+    <p>O PareDeJogar tem produto real, conteúdo de qualidade e infraestrutura funcional. O MVP está ~80% pronto. Os principais riscos são o pagamento não testado em produção e ausência de analytics. Não é necessário refazer do zero — é necessário testar, estabilizar e adicionar camadas de negócio.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="divider"></div>
+  <p>PareDeJogar · Instituto ISTOP · Relatório gerado em Abril 2026</p>
+  <p style="margin-top:0.5rem; color:#aaa;">paredejogar.com · softiahouse/paredejogar</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
